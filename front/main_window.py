@@ -1,6 +1,8 @@
 import sys
-from PySide6.QtWidgets import QWidget, QMainWindow, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit
+from PySide6.QtWidgets import QWidget, QMainWindow, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit, \
+    QListView, QListWidget
 from front.add_note_window import AddNoteWindow
+from database.JSONHandler import JSONHandler
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -15,6 +17,11 @@ class MainWindow(QMainWindow):
         self.search_line = QLineEdit()
         self.search_line.setPlaceholderText("🔎 Search...")
 
+        self.json_db = JSONHandler("../database/notes.json")
+
+        self.list_notes = QListWidget()
+        self.update_notes_list()
+
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
@@ -26,11 +33,19 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(central_widget)
         main_layout.addLayout(top_layout)
         main_layout.addStretch()
-
+        main_layout.addWidget(self.list_notes)
 
     def add_button_clicked(self):
         self.add_note_window = AddNoteWindow()
         self.add_note_window.show()
+        self.add_note_window.closeEvent = self.update_notes_list_event
+
+    def update_notes_list_event(self, event):
+        self.update_notes_list()
+
+    def update_notes_list(self):
+        self.list_notes.clear()
+        self.list_notes.addItems(self.json_db.load_notes())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

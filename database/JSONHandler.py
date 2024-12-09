@@ -28,15 +28,20 @@ class JSONHandler:
         with open(self.filepath, "w") as file:
             json.dump(data, file, indent=4)
 
-
     def update_note(self, updated_note: Note):
         try:
             with open(self.filepath, "r") as file:
                 data = json.load(file)
 
             for note in data.get("notes", []):
-                if note["id"] == updated_note["id"]:
-                    note.update(updated_note)
+                if note["id"] == updated_note.id:
+                    note.update(
+                        {
+                            "title": updated_note.title,
+                            "content": updated_note.content,
+                            "category": updated_note.category,
+                        }
+                    )
                     break
 
             with open(self.filepath, "w") as file:
@@ -49,7 +54,7 @@ class JSONHandler:
         try:
             with open(self.filepath, "r") as file:
                 data = json.load(file)
-                return data.get("notes", [])
+                return [f"{note['title']}: {note['content']}" for note in data.get("notes", [])]
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Error loading notes: {e}")
             return []
