@@ -13,7 +13,7 @@ class JSONHandler:
             "id": note.id,
             "title": note.title,
             "content": note.content,
-            "date": note.date,
+            "date": note.date.strftime("%I:%M%p on %B %d, %Y"),
             "category": note.category
         }
 

@@ -3,7 +3,7 @@ import uuid
 
 from PySide6.QtWidgets import QMainWindow, QApplication, QVBoxLayout, QLineEdit, QWidget, QPushButton
 from back.note import Note
-from database import JSONHandler
+from database.JSONHandler import JSONHandler
 
 class AddNoteWindow(QMainWindow):
     def __init__(self):
@@ -22,7 +22,7 @@ class AddNoteWindow(QMainWindow):
         self.content_line.setPlaceholderText("Enter note content...")
 
         self.add_button = QPushButton("Add")
-        self.add_button.clicked.connect(self.add_button_clicked())
+        self.add_button.clicked.connect(self.add_button_clicked)
 
         layout = QVBoxLayout(central_widget)
         layout.setSpacing(20)
@@ -36,12 +36,11 @@ class AddNoteWindow(QMainWindow):
         note_id = str(uuid.uuid4())
         category = "General"
 
-        #json_db = JSONHandler("../database/notes.json")
-        new_note = Note(id=note_id, title=self.title_line.text(), content=self.content_line.toPlainText(),
+        json_db = JSONHandler("../database/notes.json")
+        new_note = Note(id=note_id, title=self.title_line.text(), content=self.content_line.text(),
                         category=category)
-        #json_db.create(new_note)
+        json_db.create(new_note)
 
-        self.note_created.emit()
         self.close()
 
 if __name__ == "__main__":
