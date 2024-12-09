@@ -54,7 +54,7 @@ class JSONHandler:
         try:
             with open(self.filepath, "r") as file:
                 data = json.load(file)
-                return [f"{note['title']}: {note['content']}" for note in data.get("notes", [])]
+                return [f"{note['title']}" for note in data.get("notes", [])]
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Error loading notes: {e}")
             return []

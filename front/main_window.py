@@ -3,12 +3,13 @@ from PySide6.QtWidgets import QWidget, QMainWindow, QApplication, QPushButton, Q
     QListView, QListWidget
 from front.add_note_window import AddNoteWindow
 from database.JSONHandler import JSONHandler
+from front.RnE_note_window import RnENoteWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("NoTextNerv")
-        self.resize(1300, 800)
+        self.resize(1100, 600)
 
         self.add_button = QPushButton("+")
         self.add_button.setFixedSize(50, 50)
@@ -22,6 +23,8 @@ class MainWindow(QMainWindow):
         self.list_notes = QListWidget()
         self.update_notes_list()
 
+        self.list_notes.currentRowChanged.connect(self.button_note_clicked)
+
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
@@ -32,8 +35,11 @@ class MainWindow(QMainWindow):
 
         main_layout = QVBoxLayout(central_widget)
         main_layout.addLayout(top_layout)
-        main_layout.addStretch()
         main_layout.addWidget(self.list_notes)
+
+    def button_note_clicked(self):
+        self.RnE_note_window = RnENoteWindow()
+        self.RnE_note_window.show()
 
     def add_button_clicked(self):
         self.add_note_window = AddNoteWindow()

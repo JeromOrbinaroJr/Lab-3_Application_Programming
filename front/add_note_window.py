@@ -9,7 +9,7 @@ class AddNoteWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Add Note")
-        self.resize(1000, 600)
+        self.resize(900, 500)
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
