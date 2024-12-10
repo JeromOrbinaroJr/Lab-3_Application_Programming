@@ -1,12 +1,26 @@
 import json
 from back.note import Note
 
-def NoteNotFound(Exception):
+class NoteNotFound(Exception):
     pass
 
 class JSONHandler:
     def __init__(self, filepath):
         self.filepath = filepath
+
+    def _load_data(self):
+        try:
+            with open(self.filepath, "r") as file:
+                return json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {"notes": []}
+
+    def _save_data(self, data):
+        try:
+            with open(self.filepath, "w") as file:
+                json.dump(data, file, indent=4)
+        except IOError as e:
+            print(f"Error saving data to {self.filepath}: {e}")
 
     def create(self, note: Note):
         note_data = {
@@ -17,57 +31,39 @@ class JSONHandler:
             "category": note.category
         }
 
-        try:
-            with open(self.filepath, "r") as file:
-                data = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            data = {"notes": []}
-
+        data = self._load_data()
         data["notes"].append(note_data)
-
-        with open(self.filepath, "w") as file:
-            json.dump(data, file, indent=4)
+        self._save_data(data)
 
     def update_note(self, updated_note: Note):
-        try:
-            with open(self.filepath, "r") as file:
-                data = json.load(file)
+        data = self._load_data()
 
-            for note in data.get("notes", []):
-                if note["id"] == updated_note.id:
-                    note.update(
-                        {
-                            "title": updated_note.title,
-                            "content": updated_note.content,
-                            "category": updated_note.category,
-                        }
-                    )
-                    break
+        updated = False
+        for note in data.get("notes", []):
+            if note["id"] == updated_note.id:
+                note.update({
+                    "title": updated_note.title,
+                    "content": updated_note.content,
+                    "category": updated_note.category,
+                })
+                updated = True
+                break
 
-            with open(self.filepath, "w") as file:
-                json.dump(data, file, indent=4)
-
-        except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error updating note: {e}")
+        if updated:
+            self._save_data(data)
+        else:
+            raise NoteNotFound(f"Note with ID {updated_note.id} not found.")
 
     def load_notes(self):
-        try:
-            with open(self.filepath, "r") as file:
-                data = json.load(file)
-                return [f"{note['title']}" for note in data.get("notes", [])]
-        except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error loading notes: {e}")
-            return []
+        data = self._load_data()
+        return data.get("notes", [])
 
     def delete_note(self, note_id):
-        try:
-            with open(self.filepath, "r") as file:
-                data = json.load(file)
-            data["notes"] = [note for note in data.get("notes", []) if note["id"] != note_id]
+        data = self._load_data()
+        notes = data.get("notes", [])
 
-            with open(self.filepath, "w") as file:
-                json.dump(data, file, indent=4)
-            return True
+        data["notes"] = [note for note in notes if note["id"] != note_id]
 
-        except (FileNotFoundError, json.JSONDecodeError):
-            return False
+        self._save_data(data)
+        return True
+
