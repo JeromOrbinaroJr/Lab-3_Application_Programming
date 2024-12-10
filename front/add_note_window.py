@@ -18,6 +18,8 @@ class AddNoteWindow(QMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
+        self.load_styles()
+
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
@@ -56,6 +58,13 @@ class AddNoteWindow(QMainWindow):
         self.update_callback()
 
         self.close()
+
+    def load_styles(self):
+        try:
+            with open("../styles/add_note_window_style.qss", "r") as file:
+                self.setStyleSheet(file.read())
+        except Exception as e:
+            print(f"Error loading stylesheet: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

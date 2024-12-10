@@ -12,6 +12,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("NoTextNerv")
         self.resize(1100, 600)
 
+        self.load_styles()
+
         self.json_db = JSONHandler("../database/notes.json")
 
         self._setup_ui()
@@ -85,6 +87,12 @@ class MainWindow(QMainWindow):
         except KeyError as e:
             print(f"Error adding note to list: {e}")
 
+    def load_styles(self):
+        try:
+            with open("../styles/main_window_styles.qss", "r") as file:
+                self.setStyleSheet(file.read())
+        except Exception as e:
+            print(f"Error loading stylesheet: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
