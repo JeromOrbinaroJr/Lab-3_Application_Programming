@@ -19,6 +19,16 @@ QLineEdit {
     color: #2a6478;
 }
 
+QTextEdit {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #2a6478;
+    background-color: white;
+    font-size: 14px;
+    color: #2a6478;
+    min-height: 150px;
+}
+
 QPushButton {
     background-color: #2a6478;
     color: white;
@@ -46,4 +56,31 @@ QLabel#date_label {
     font-size: 12px;
     color: #2a6478;
     margin-top: 20px;
+}
+
+QComboBox {
+    background-color: white;
+    border: 1px solid #2a6478;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    color: #2a6478;
+}
+
+QComboBox::drop-down {
+    border: none;
+    background-color: #f0f0f0;
+}
+
+QComboBox::down-arrow {
+    width: 16px;
+    height: 16px;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid #2a6478;
+    border-radius: 6px;
+    background-color: white;
+    selection-background-color: #2a6478;
+    selection-color: white;
 }

@@ -13,7 +13,7 @@ class JSONHandler:
             with open(self.filepath, "r") as file:
                 return json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
-            return {"notes": []}
+            return {"notes": [], "categories": []}
 
     def _save_data(self, data):
         try:
@@ -66,4 +66,16 @@ class JSONHandler:
 
         self._save_data(data)
         return True
+
+    def get_categories(self):
+        data = self._load_data()
+        return data.get("categories", [])
+
+    def add_category(self, category):
+        data = self._load_data()
+        categories = data.get("categories", [])
+        if category not in categories:
+            categories.append(category)
+            data["categories"] = categories
+            self._save_data(data)
 

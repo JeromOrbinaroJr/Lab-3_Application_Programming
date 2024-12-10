@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.json_db = JSONHandler("../database/notes.json")
 
         self._setup_ui()
-        self._connect_signals()
+        self.connect_signals()
 
         self.update_notes_list()
 
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(top_layout)
         main_layout.addWidget(self.list_view)
 
-    def _connect_signals(self):
+    def connect_signals(self):
         self.add_button.clicked.connect(self.add_button_clicked)
         self.list_view.selectionModel().selectionChanged.connect(self.button_note_clicked)
 
@@ -62,8 +62,8 @@ class MainWindow(QMainWindow):
         self.add_note_window.show()
 
     def _open_rne_note_window(self, note_data):
-        self.RnE_note_window = RnENoteWindow(note_data, self.update_notes_list, parent=self)
-        self.RnE_note_window.show()
+        self.rne_note_window = RnENoteWindow(note_data, self.update_notes_list, parent=self)
+        self.rne_note_window.show()
 
     def update_notes_list(self):
         self.model.clear()
@@ -93,6 +93,7 @@ class MainWindow(QMainWindow):
                 self.setStyleSheet(file.read())
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

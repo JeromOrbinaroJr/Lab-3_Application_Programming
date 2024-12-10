@@ -1,8 +1,10 @@
 import sys
-from PySide6.QtWidgets import QWidget, QApplication, QMainWindow, QVBoxLayout, QFormLayout, QLineEdit, QLabel, QPushButton
+from PySide6.QtWidgets import QWidget, QApplication, QMainWindow, QVBoxLayout, QFormLayout, QLineEdit, QLabel, \
+    QPushButton, QComboBox, QTextEdit
 from PySide6.QtCore import QDateTime
 from back.note import Note
 from database.JSONHandler import JSONHandler
+
 
 class RnENoteWindow(QMainWindow):
     def __init__(self, note_data, update_callback, parent=None):
@@ -29,9 +31,15 @@ class RnENoteWindow(QMainWindow):
         self.title_edit.setPlaceholderText("Enter the title of your note...")
         form_layout.addRow(QLabel("Title:"), self.title_edit)
 
-        self.content_edit = QLineEdit(self.note_data.get("content", ""))
+        self.content_edit = QTextEdit(self.note_data.get("content", ""))
         self.content_edit.setPlaceholderText("Enter the content of your note...")
+        self.content_edit.setFixedHeight(150)  # Set fixed height for content input
         form_layout.addRow(QLabel("Content:"), self.content_edit)
+
+        self.category_combobox = QComboBox()
+        self.load_categories()  # Load all categories
+        self.category_combobox.setCurrentText(self.note_data.get("category", "General"))
+        form_layout.addRow(QLabel("Category:"), self.category_combobox)
 
         self.save_button = QPushButton("Save")
         self.save_button.clicked.connect(self.save_note)
@@ -47,13 +55,14 @@ class RnENoteWindow(QMainWindow):
         layout.addWidget(self.delete_button)
         layout.addWidget(self.date_label)
 
-    def update_time_label(self):
-        note_datetime_str = self.note_data.get("date", "")
-        self.date_label.setText(f"Date: {note_datetime_str}")
+    def load_categories(self):
+        categories = self.json_db.get_categories()
+        self.category_combobox.addItems(categories)
 
     def save_note(self):
         self.note_data["title"] = self.title_edit.text()
-        self.note_data["content"] = self.content_edit.text()
+        self.note_data["content"] = self.content_edit.toPlainText()
+        self.note_data["category"] = self.category_combobox.currentText()
 
         current_datetime = QDateTime.currentDateTime().toString()
 
@@ -61,13 +70,12 @@ class RnENoteWindow(QMainWindow):
             id=self.note_data["id"],
             title=self.note_data["title"],
             content=self.note_data["content"],
-            category=self.note_data.get("category", "General"),
+            category=self.note_data["category"],
             date=current_datetime
         )
 
         self.json_db.update_note(updated_note)
         self.close()
-
         self.update_callback()
 
     def delete_note(self):
@@ -78,12 +86,17 @@ class RnENoteWindow(QMainWindow):
         else:
             print("Error deleting the note.")
 
+    def update_time_label(self):
+        note_datetime_str = self.note_data.get("date", "")
+        self.date_label.setText(f"Date: {note_datetime_str}")
+
     def load_styles(self):
         try:
             with open("../styles/RnE_window_styles.qss", "r") as file:
                 self.setStyleSheet(file.read())
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
