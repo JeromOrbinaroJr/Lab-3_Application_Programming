@@ -17,7 +17,7 @@ QLineEdit {
     background-color: white;
     font-size: 16px;
     color: #2a6478;
-    min-height: 40px; /* Добавляем минимальную высоту для улучшения визуального восприятия */
+    min-height: 40px;
 }
 
 QTextEdit {
@@ -27,7 +27,7 @@ QTextEdit {
     background-color: white;
     font-size: 16px;
     color: #2a6478;
-    min-height: 150px; /* Устанавливаем минимальную высоту для текстового поля */
+    min-height: 150px;
     line-height: 1.5;
     word-wrap: break-word;
 }

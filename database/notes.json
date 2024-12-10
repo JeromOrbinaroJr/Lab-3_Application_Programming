@@ -1,35 +1,15 @@
 {
     "notes": [
         {
-            "id": "a2e7a4a9-d6e7-4dde-b8d9-dd3f7838e57b",
-            "title": "",
-            "content": "",
-            "date": "07:02PM on December 10, 2024",
-            "category": "General"
-        },
-        {
             "id": "9c7d95c3-b546-4352-b779-023e90d78a7d",
             "title": "F.N.",
             "content": "....",
             "date": "07:11PM on December 10, 2024",
-            "category": "Coding"
-        },
-        {
-            "id": "6bb2d965-1f81-44ac-8317-1a7b66785307",
-            "title": "",
-            "content": "",
-            "date": "07:30PM on December 10, 2024",
-            "category": "Coding"
-        },
-        {
-            "id": "4fd85542-85be-47f1-8665-523f054b12ea",
-            "title": "S.N.",
-            "content": "Mmm...",
-            "date": "08:00PM on December 10, 2024",
-            "category": "Thinking"
+            "category": "General"
         }
     ],
     "categories": [
+        "General",
         "Coding",
         "Thinking"
     ]

@@ -47,3 +47,5 @@ QListView::item:selected {
     background-color: #2a6478;
     color: white;
 }
+
+

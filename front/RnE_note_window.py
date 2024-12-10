@@ -33,11 +33,11 @@ class RnENoteWindow(QMainWindow):
 
         self.content_edit = QTextEdit(self.note_data.get("content", ""))
         self.content_edit.setPlaceholderText("Enter the content of your note...")
-        self.content_edit.setFixedHeight(150)  # Set fixed height for content input
+        self.content_edit.setFixedHeight(150)
         form_layout.addRow(QLabel("Content:"), self.content_edit)
 
         self.category_combobox = QComboBox()
-        self.load_categories()  # Load all categories
+        self.load_categories()
         self.category_combobox.setCurrentText(self.note_data.get("category", "General"))
         form_layout.addRow(QLabel("Category:"), self.category_combobox)
 

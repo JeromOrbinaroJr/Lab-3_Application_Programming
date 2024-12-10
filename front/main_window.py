@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
 
         self.search_line = QLineEdit()
         self.search_line.setPlaceholderText("🔎 Search...")
+        self.search_line.textChanged.connect(self.search_notes)
 
         self.list_view = QListView()
         self.model = QStandardItemModel(self.list_view)
@@ -53,7 +54,7 @@ class MainWindow(QMainWindow):
         if index.isValid():
             note_data = index.data(Qt.UserRole)
             if note_data:
-                self._open_rne_note_window(note_data)
+                self.open_rne_note_window(note_data)
             else:
                 print("No note selected.")
 
@@ -61,7 +62,7 @@ class MainWindow(QMainWindow):
         self.add_note_window = AddNoteWindow(self.update_notes_list)
         self.add_note_window.show()
 
-    def _open_rne_note_window(self, note_data):
+    def open_rne_note_window(self, note_data):
         self.rne_note_window = RnENoteWindow(note_data, self.update_notes_list, parent=self)
         self.rne_note_window.show()
 
@@ -78,14 +79,28 @@ class MainWindow(QMainWindow):
     def _add_note_to_list(self, note):
         try:
             title = note.get("title", "Untitled")
+            category = note.get("category", "Uncategorized")
+
+            display_text = f"{title} ({category})"
+
             if title:
-                item = QStandardItem(title)
+                item = QStandardItem(display_text)
                 item.setData(note, Qt.UserRole)
                 self.model.appendRow(item)
             else:
                 print(f"Note missing title or title is empty: {note}")
         except KeyError as e:
             print(f"Error adding note to list: {e}")
+
+    def search_notes(self):
+        search_text = self.search_line.text().lower()
+        notes = self.json_db.load_notes()
+
+        filtered_notes = [note for note in notes if search_text in note.get("title", "").lower()]
+
+        self.model.clear()
+        for note in filtered_notes:
+            self._add_note_to_list(note)
 
     def load_styles(self):
         try:
