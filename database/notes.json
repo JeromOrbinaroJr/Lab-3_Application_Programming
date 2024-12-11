@@ -1,16 +1,22 @@
 {
     "notes": [
         {
-            "id": "9c7d95c3-b546-4352-b779-023e90d78a7d",
-            "title": "F.N.",
-            "content": "....",
-            "date": "07:11PM on December 10, 2024",
-            "category": "General"
+            "id": "05f8aadd-4129-437e-aa2f-a53b8731be0c",
+            "title": "FN",
+            "content": "...",
+            "date": "01:10PM on December 11, 2024",
+            "category": "Unknown"
+        },
+        {
+            "id": "e987f04c-2818-42f9-9a0f-da7f26e75bf1",
+            "title": "SN",
+            "content": "...",
+            "date": "01:10PM on December 11, 2024",
+            "category": "Unknown"
         }
     ],
     "categories": [
-        "General",
-        "Coding",
-        "Thinking"
+        "Unknown",
+        "General"
     ]
 }
