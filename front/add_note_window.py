@@ -1,12 +1,8 @@
 import sys
 import uuid
-from PySide6.QtWidgets import (
-    QMainWindow, QApplication, QVBoxLayout, QLineEdit, QTextEdit, QWidget,
-    QPushButton, QLabel, QFormLayout, QInputDialog, QComboBox, QMessageBox
-)
+from PySide6.QtWidgets import QMainWindow, QApplication, QVBoxLayout, QLineEdit, QTextEdit, QWidget, QPushButton, QLabel, QFormLayout, QInputDialog, QComboBox, QMessageBox
 from back.note import Note
 from database.JSONHandler import JSONHandler
-
 
 class AddNoteWindow(QMainWindow):
     def __init__(self, update_callback):
@@ -124,7 +120,7 @@ class AddNoteWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    window = AddNoteWindow(lambda: print("Notes list updated"))
+    window = AddNoteWindow()
     window.show()
 
     sys.exit(app.exec())

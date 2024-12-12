@@ -1,17 +1,17 @@
 {
     "notes": [
         {
-            "id": "05f8aadd-4129-437e-aa2f-a53b8731be0c",
-            "title": "FN",
-            "content": "...",
-            "date": "01:10PM on December 11, 2024",
-            "category": "Unknown"
+            "id": "1ff0f129-0c22-4dbf-b20f-3f2acdb09aa7",
+            "title": "First Note",
+            "content": "Content...",
+            "date": "01:29PM on December 11, 2024",
+            "category": "General"
         },
         {
-            "id": "e987f04c-2818-42f9-9a0f-da7f26e75bf1",
-            "title": "SN",
-            "content": "...",
-            "date": "01:10PM on December 11, 2024",
+            "id": "6df87118-6d9d-4c12-aa4d-cf4acd089619",
+            "title": "Second Note",
+            "content": "Content",
+            "date": "01:32PM on December 11, 2024",
             "category": "Unknown"
         }
     ],

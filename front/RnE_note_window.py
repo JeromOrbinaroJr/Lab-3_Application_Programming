@@ -1,17 +1,20 @@
 import sys
-from PySide6.QtWidgets import QWidget, QApplication, QMainWindow, QVBoxLayout, QFormLayout, QLineEdit, QLabel, \
-    QPushButton, QComboBox, QTextEdit, QMessageBox
+from PySide6.QtWidgets import QWidget, QApplication, QMainWindow, QVBoxLayout, QFormLayout, QLineEdit, QLabel, QPushButton, QComboBox, QTextEdit, QMessageBox
 from PySide6.QtCore import QDateTime
 from back.note import Note
 from database.JSONHandler import JSONHandler
-
 
 class RnENoteWindow(QMainWindow):
     def __init__(self, note_data, update_callback, parent=None):
         super().__init__(parent)
         self.note_data = note_data
         self.update_callback = update_callback
-        self.json_db = JSONHandler("../database/notes.json")
+
+        try:
+            self.json_db = JSONHandler("../database/notes.json")
+        except Exception as e:
+            print(f"Error initializing database handler: {e}")
+            self.json_db = None
 
         self.setWindowTitle(f"Read & Edit: {self.note_data.get('title', 'Untitled')}")
         self.resize(900, 500)
@@ -19,7 +22,10 @@ class RnENoteWindow(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self):
-        self.load_styles()
+        try:
+            self.load_styles()
+        except Exception as e:
+            self.show_error_message(f"Error loading styles: {e}")
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)

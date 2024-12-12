@@ -1,7 +1,5 @@
 import sys
-from PySide6.QtWidgets import (
-    QWidget, QMainWindow, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit, QListView
-)
+from PySide6.QtWidgets import QWidget, QMainWindow, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit, QListView
 from PySide6.QtGui import QStandardItemModel, QStandardItem, Qt
 from front.add_note_window import AddNoteWindow
 from database.JSONHandler import JSONHandler
@@ -14,8 +12,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("NoTextNerv")
         self.resize(1100, 600)
 
-        self.load_styles()
-
         try:
             self.json_db = JSONHandler("../database/notes.json")
         except Exception as e:
@@ -23,12 +19,16 @@ class MainWindow(QMainWindow):
             self.json_db = None
 
         self.setup_ui()
-        self.connect_signals()
 
         if self.json_db:
             self.update_notes_list()
 
     def setup_ui(self):
+        try:
+            self.load_styles()
+        except Exception as e:
+            self.show_error_message(f"Error loading styles: {e}")
+
         self.add_button = QPushButton("+")
         self.add_button.setFixedSize(50, 50)
 
@@ -45,15 +45,13 @@ class MainWindow(QMainWindow):
         top_layout = QHBoxLayout()
         top_layout.addStretch()
         top_layout.addWidget(self.search_line, stretch=1)
+        self.search_line.textChanged.connect(self.search_notes)
         top_layout.addWidget(self.add_button)
+        self.add_button.clicked.connect(self.add_button_clicked)
 
         main_layout = QVBoxLayout(central_widget)
         main_layout.addLayout(top_layout)
         main_layout.addWidget(self.list_view)
-
-    def connect_signals(self):
-        self.add_button.clicked.connect(self.add_button_clicked)
-        self.search_line.textChanged.connect(self.search_notes)
         self.list_view.selectionModel().selectionChanged.connect(self.button_note_clicked)
 
     def button_note_clicked(self, selected, deselected):
@@ -61,18 +59,15 @@ class MainWindow(QMainWindow):
         if index.isValid():
             note_data = index.data(Qt.UserRole)
             if note_data:
-                self.open_rne_note_window(note_data)
+                try:
+                    self.rne_note_window = RnENoteWindow(note_data, self.update_notes_list, parent=self)
+                    self.rne_note_window.show()
+                except Exception as e:
+                    print(f"Error opening RnE note window: {e}")
 
     def add_button_clicked(self):
         self.add_note_window = AddNoteWindow(self.update_notes_list)
         self.add_note_window.show()
-
-    def open_rne_note_window(self, note_data):
-        try:
-            self.rne_note_window = RnENoteWindow(note_data, self.update_notes_list, parent=self)
-            self.rne_note_window.show()
-        except Exception as e:
-            print(f"Error opening RnE note window: {e}")
 
     def update_notes_list(self):
         if self.json_db:
